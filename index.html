@@ -23,7 +23,6 @@
     .card:hover .card-text-preview {display:block;}
     footer {background:#9b5cff; color:white; text-align:center; padding:16px; margin-top:24px;}
     
-    /* Приветствие */
     #welcome {
       position:fixed;
       top:0; left:0; right:0; bottom:0;
@@ -48,8 +47,8 @@
       to {transform: translateY(-20px);}
     }
 
-    /* Модальное окно */
-    .modal-content {background:#7b53ff; color:white;}
+    /* Модалка */
+    .modal-content {background: linear-gradient(135deg, #7b53ff 0%, #a373ff 100%); color:white;}
     .modal-header {border-bottom:none;}
     .modal-footer {border-top:none;}
     .modal-body img {width:100%; border-radius:12px; margin-bottom:16px;}
@@ -92,7 +91,7 @@
   <div>© 2026</div>
 </footer>
 
-<!-- Модальное окно -->
+<!-- Модалка -->
 <div class="modal fade" id="cartoonModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
@@ -118,37 +117,66 @@
     }, 3000);
   });
 
-  // Массив 50 мультфильмов
+  // 50 мультфильмов
   const cartoons = [];
   for(let i=1; i<=50; i++){
     cartoons.push({
       title: `Мультфильм ${i}`,
       description: `Это подробное описание мультфильма ${i}. Здесь можно написать сюжет, персонажей и интересные факты.`,
-      img: `https://via.placeholder.com/300x400?text=Мультфильм+${i}` // заменишь на свои картинки
+      img: `https://via.placeholder.com/300x400?text=Мультфильм+${i}`
     });
   }
 
-  // Генерация карточек
   const cardsRow = document.getElementById('cards-row');
   const modal = new bootstrap.Modal(document.getElementById('cartoonModal'));
-  cartoons.forEach(c => {
+
+  cartoons.forEach((c, index) => {
     const col = document.createElement('div');
     col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
     col.innerHTML = `
       <div class="card">
-        <img src="${https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdb7irgoJBxx9uVpzm4WDUW5fTidcbxaQEJABKBnOIcweza-O_vCKFPv6mPKpDgu4NApJEC-iArrrtFAEaOSSAQg-WKn2KDPvpc6JizQ&s=10}" class="card-img-top">
+        <img src="${c.img}" class="card-img-top">
         <div class="p-2"><h6>${c.title}</h6></div>
         <div class="card-text-preview">${c.description}</div>
       </div>
     `;
-    col.querySelector('.card').addEventListener('click', ()=> {
+    col.querySelector('.card').addEventListener('click', () => {
       document.getElementById('modalTitle').textContent = c.title;
-      document.getElementById('modalImg').src = https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdb7irgoJBxx9uVpzm4WDUW5fTidcbxaQEJABKBnOIcweza-O_vCKFPv6mPKpDgu4NApJEC-iArrrtFAEaOSSAQg-WKn2KDPvpc6JizQ&s=10;
+      document.getElementById('modalImg').src = c.img;
       document.getElementById('modalDesc').textContent = c.description;
       modal.show();
     });
     cardsRow.appendChild(col);
   });
+
+  // Анимация появления карточек
+  function animateCards() {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, i) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      setTimeout(() => {
+        card.style.transition = '0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, i * 80);
+    });
+  }
+
+  window.addEventListener('load', animateCards);
+
+  // Hover эффект
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', () => card.style.transform = 'scale(1.08) rotate(1deg)');
+    card.addEventListener('mouseleave', () => card.style.transform = 'scale(1)');
+  });
+
+  // Пульсация видео
+  setInterval(() => {
+    document.querySelectorAll('iframe').forEach((iframe, i) => {
+      iframe.style.transform = `scale(${1 + Math.sin(Date.now() * 0.001 + i) * 0.02})`;
+    });
+  }, 100);
 </script>
 
 </body>
