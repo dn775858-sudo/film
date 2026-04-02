@@ -4,100 +4,109 @@
   <meta charset="UTF-8">
   <title>Мультики и видео</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
       margin: 0;
     }
+
     header {
       display: flex;
       align-items: center;
       background: #001529;
-      padding: 0 16px;
+      padding: 12px 16px;
       color: white;
     }
+
     .logo {
       font-weight: bold;
       font-size: 20px;
       margin-right: 24px;
     }
+
     .menu-item {
-      display: inline-block;
       margin-right: 16px;
       cursor: pointer;
-      color: white;
     }
+
     .menu-item.active {
-      font-weight: bold;
       text-decoration: underline;
+      font-weight: bold;
     }
+
     .content {
       padding: 24px;
       background: #a373ff;
-      min-height: 280px;
-      border-radius: 10px;
+      min-height: 300px;
+      border-radius: 12px;
       color: white;
+      margin: 16px;
     }
+
     .card {
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
       position: relative;
+      border-radius: 12px;
+      overflow: hidden;
     }
+
     .card:hover {
       transform: scale(1.05);
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
+
+    .card-img-top {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+    }
+
     .card-text-preview {
       position: absolute;
       bottom: 0;
-      left: 0;
       width: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.65);
       color: white;
-      padding: 4px 8px;
+      padding: 6px 10px;
       font-size: 14px;
       display: none;
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
     }
+
     .card:hover .card-text-preview {
       display: block;
     }
-    .card-img-top {
-      width: 100%;
-      border-radius: 10px;
-    }
+
     footer {
       text-align: center;
       background: #9b5cff;
       color: white;
+      padding: 16px;
       margin-top: 24px;
-      padding: 16px 0;
     }
-    /* Модальное окно */
+
+    /* modal */
     .modal {
       display: none;
       position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
       z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.7);
     }
+
     .modal-content {
-      background-color: white;
+      background: white;
       margin: 5% auto;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
       max-width: 900px;
     }
+
     .modal-close {
       float: right;
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 26px;
       cursor: pointer;
     }
   </style>
@@ -106,130 +115,116 @@
 
 <header>
   <div class="logo">LOGO</div>
-  <div class="menu">
-    <span class="menu-item active" data-tab="cartoons">Мультики</span>
-    <span class="menu-item" data-tab="games">Игры</span>
-  </div>
+  <span class="menu-item active">Мультики</span>
 </header>
 
 <div class="content">
-  <!-- Видео ряд в начале -->
+
   <h4>Популярные видео</h4>
   <div id="videos-row" class="row g-3 mb-4"></div>
 
-  <!-- Карточки мультфильмов -->
   <h4>Мультфильмы</h4>
   <div id="cards-row" class="row g-3"></div>
+
 </div>
 
 <footer>
-  <div style="font-weight: bold; font-size: 18px;">LOGO</div>
+  <div><b>LOGO</b></div>
   <div>Made by Dildora</div>
-  <div>© 2026 Все права защищены</div>
+  <div>© 2026</div>
 </footer>
 
-<!-- Модальное окно -->
+<!-- modal -->
 <div id="modal" class="modal">
   <div class="modal-content">
     <span class="modal-close">&times;</span>
     <h3 id="modal-title"></h3>
-    <div id="modal-images" class="row g-2"></div>
-    <div id="modal-description" style="margin-top: 16px;"></div>
+    <div id="modal-description"></div>
   </div>
 </div>
 
 <script>
-  const movies = [
-    { title: 'Hotel transilvaie', url: 'https://www.youtube.com/embed/t6-2M49KV68' },
-    { title: 'Quens dog 1', url: 'https://www.youtube.com/embed/bZP_3CU7EsQ' },
-    { title: 'Turning Red1', url: 'https://www.youtube.com/embed/KZcqB7xsqMA' },
-    { title: 'Neja 2', url: 'https://www.youtube.com/embed/_9Y13VNYUPI' },
+  const videos = [
+    { title: 'Hotel Transylvania', url: 'https://www.youtube.com/embed/t6-2M49KV68' },
+    { title: 'Queen’s Dog', url: 'https://www.youtube.com/embed/bZP_3CU7EsQ' },
+    { title: 'Turning Red', url: 'https://www.youtube.com/embed/KZcqB7xsqMA' },
+    { title: 'Ne Zha 2', url: 'https://www.youtube.com/embed/_9Y13VNYUPI' },
   ];
 
-  let cartoonsData = [];
-  const cardsRow = document.getElementById('cards-row');
   const videosRow = document.getElementById('videos-row');
+  const cardsRow = document.getElementById('cards-row');
+
   const modal = document.getElementById('modal');
   const modalTitle = document.getElementById('modal-title');
-  const modalImages = document.getElementById('modal-images');
   const modalDescription = document.getElementById('modal-description');
-  const closeModal = document.querySelector('.modal-close');
+  const modalClose = document.querySelector('.modal-close');
 
-  // Меню
-  document.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      renderCards(item.dataset.tab);
-    });
+  /* видео */
+  videos.forEach(v => {
+    const col = document.createElement('div');
+    col.className = 'col-12 col-sm-6 col-md-3';
+    col.innerHTML = `
+      <h6>${v.title}</h6>
+      <iframe width="100%" height="200" src="${v.url}" allowfullscreen></iframe>
+    `;
+    videosRow.appendChild(col);
   });
 
-  // Закрытие модалки
-  closeModal.onclick = () => { modal.style.display = 'none'; };
-  window.onclick = (e) => { if(e.target === modal) modal.style.display = 'none'; };
-
-  // Отобразить видео ряд в начале
-  function renderVideos() {
-    videosRow.innerHTML = '';
-    movies.forEach(item => {
-      const col = document.createElement('div');
-      col.className = 'col-12 col-sm-6 col-md-4 col-lg-3';
-      col.innerHTML = `
-        <h5>${item.title}</h5>
-        <iframe width="100%" height="200" src="${item.url}" frameborder="0" allowfullscreen></iframe>
-      `;
-      videosRow.appendChild(col);
-    });
-  }
-
-  renderVideos();
-
-  // Получение данных мультфильмов
+  /* 🔴 ПРАВИЛЬНОЕ ПОЛУЧЕНИЕ МУЛЬТИКОВ */
   fetch('https://zhamal-tv.netlify.app/cartoons/get_all')
     .then(res => res.json())
     .then(data => {
-      cartoonsData = data;
-      renderCards('cartoons');
-    })
-    .catch(err => console.error(err));
+      console.log('API DATA:', data);
 
-  function renderCards(tab) {
+      const cartoons = Array.isArray(data)
+        ? data
+        : data.data || [];
+
+      renderCards(cartoons);
+    })
+    .catch(() => {
+      /* запасной вариант, чтобы сайт НЕ был пустым */
+      renderCards([
+        {
+          title: 'Frozen',
+          posterPath: 'https://via.placeholder.com/300x400',
+          description: 'Мультфильм про дружбу и магию'
+        }
+      ]);
+    });
+
+  function renderCards(items) {
     cardsRow.innerHTML = '';
-    let items = [];
-    if(tab === 'cartoons') items = cartoonsData;
 
     items.forEach(item => {
       const col = document.createElement('div');
       col.className = 'col-12 col-sm-6 col-md-4 col-lg-3';
-      const card = document.createElement('div');
-      card.className = 'card p-2';
 
-      card.innerHTML = `
-        <img src="${item.posterPath}" class="card-img-top" alt="${item.title}">
-        <div class="card-body">
-          <h5 class="card-title">${item.title}</h5>
+      col.innerHTML = `
+        <div class="card">
+          <img src="${item.posterPath || item.poster || 'https://via.placeholder.com/300x400'}" class="card-img-top">
+          <div class="p-2">
+            <h6>${item.title || item.name}</h6>
+          </div>
+          <div class="card-text-preview">
+            ${(item.description || '').slice(0, 60)}
+          </div>
         </div>
-        <div class="card-text-preview">${item.description?.slice(0,50) || 'Краткое описание...'}</div>
       `;
-      card.onclick = () => openModal(item);
 
-      col.appendChild(card);
+      col.onclick = () => openModal(item);
       cardsRow.appendChild(col);
     });
   }
 
   function openModal(item) {
     modal.style.display = 'block';
-    modalTitle.innerText = item.title;
-    modalImages.innerHTML = '';
-    (item.images || []).forEach((img, i) => {
-      const imgCol = document.createElement('div');
-      imgCol.className = 'col-4';
-      imgCol.innerHTML = `<img src="${img}" style="width:100%;border-radius:10px;">`;
-      modalImages.appendChild(imgCol);
-    });
-    modalDescription.innerHTML = `<h4>Описание:</h4><p>${item.description || item.summary || item.content || 'Яркий и увлекательный мир, полный забавных героев, удивительных приключений и волшебных историй.'}</p>`;
+    modalTitle.innerText = item.title || item.name;
+    modalDescription.innerHTML = `<p>${item.description || 'Описание отсутствует'}</p>`;
   }
+
+  modalClose.onclick = () => modal.style.display = 'none';
+  window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
 </script>
 
 </body>
