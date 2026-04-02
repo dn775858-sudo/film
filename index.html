@@ -136,14 +136,14 @@
     col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
     col.innerHTML = `
       <div class="card">
-        <img src="${c.img}" class="card-img-top">
+        <img src="${https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdb7irgoJBxx9uVpzm4WDUW5fTidcbxaQEJABKBnOIcweza-O_vCKFPv6mPKpDgu4NApJEC-iArrrtFAEaOSSAQg-WKn2KDPvpc6JizQ&s=10}" class="card-img-top">
         <div class="p-2"><h6>${c.title}</h6></div>
         <div class="card-text-preview">${c.description}</div>
       </div>
     `;
     col.querySelector('.card').addEventListener('click', ()=> {
       document.getElementById('modalTitle').textContent = c.title;
-      document.getElementById('modalImg').src = c.img;
+      document.getElementById('modalImg').src = https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdb7irgoJBxx9uVpzm4WDUW5fTidcbxaQEJABKBnOIcweza-O_vCKFPv6mPKpDgu4NApJEC-iArrrtFAEaOSSAQg-WKn2KDPvpc6JizQ&s=10;
       document.getElementById('modalDesc').textContent = c.description;
       modal.show();
     });
